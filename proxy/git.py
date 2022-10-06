@@ -3,13 +3,13 @@ import os
 from .util import Base
 
 class Git(Base):
-    def proxy(self,proxy:str,args:list):
+    def set(self,proxy:str,args:list):
         if "github" in args:
             self.exec(f"git config --global https.https://github.com.proxy {proxy}")
         else:
             self.exec(f'git config --global https.proxy {proxy}')
     
-    def rmproxy(self,args:list):
+    def rm(self,args:list):
         if "github" in args:
             self.exec(f"git config --global --unset https.https://github.com.proxy")
         else:
@@ -19,10 +19,10 @@ class GitSsh(Base):
     description="set ssh proxy for github"
     message="set proxy like 127.0.0.1:7890"
     sshconfig=os.path.join(Path.home(),".ssh/config")
-    def proxy(self,proxy:str,args:list):
+    def set(self,proxy:str,args:list):
         self.text=f"Host github.com\n\tProxyCommand connect -S {proxy} %h %p"
         self.addText(self.sshconfig,self.text)
-    def rmproxy(self,args:list):
+    def rm(self,args:list):
         proxy="127.0.0.1:7890"
         self.text=f"Host github.com\n\tProxyCommand connect -S {proxy} %h %p"
         if self.text:

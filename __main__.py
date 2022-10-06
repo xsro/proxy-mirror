@@ -5,7 +5,7 @@ from proxy import proxies
 
 dryrun="--dry-run" in sys.argv or "-D" in sys.argv
 
-if len(sys.argv)==0:
+if len(sys.argv)==1:
     print("switch register and proxy")
 elif sys.argv[1]=="update":
     res=subprocess.run(['git','status'],stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL,cwd=os.path.dirname(__file__))
@@ -13,7 +13,7 @@ elif sys.argv[1]=="update":
         subprocess.run(['git','pull'],cwd=os.path.dirname(__file__))
     else:
         print("[not installed by git]")
-elif sys.argv[1]=="show":
+elif sys.argv[1]=="mirror":
     pass
 elif sys.argv[1]=="proxy":
     label=None
@@ -31,7 +31,7 @@ elif sys.argv[1]=="proxy":
     if label and label in proxies.keys():
         handler=proxies.get(label)
         handler.dryrun=dryrun
-        handler.rmproxy(args) if sys.argv[2]=="rm" else handler.proxy(proxy,args)
+        handler.rm(args) if sys.argv[2]=="rm" else handler.set(proxy,args)
     else:
         print("available tool support")
         for p in proxies.keys():
