@@ -1,12 +1,15 @@
 import sys
 import os
 import subprocess
+from lib import video2ppt
 from proxy import proxies
 
 dryrun="--dry-run" in sys.argv or "-D" in sys.argv
 
 if len(sys.argv)==1:
     print("switch register and proxy")
+elif sys.argv[1]=="v2ppt":
+    video2ppt.main(sys.argv[2:])
 elif sys.argv[1]=="update":
     res=subprocess.run(['git','status'],stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL,cwd=os.path.dirname(__file__))
     if res.returncode==0:
